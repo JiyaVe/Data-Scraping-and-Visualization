@@ -7,23 +7,23 @@ data <- as.matrix(data)
 y <- data[,1]  #response
 X <- data[,-1] #Covariate matrix
 
+
 n <- dim(X)[1]
+p <- dim(X)[2]
 
 #MLE Ridge regression 
 
 ridge_reg <- function(X,y,lam){
-  beta.ridge <- solve(t(X) %*% X + diag(lam, dim(X)[2])) %*% t(X) %*% y
-  #sigma2.ridge <- as.numeric((t(y-X %*% beta.ridge) %*% (y-X %*% beta.ridge))/n)
-  #sigma2 <- diag(sigma2.ridge,500)
-  Y <- X %*% beta.ridge #y_predicted 
-  return(Y)
+  beta.ridge <- solve(t(X) %*% X + diag(lam, p) %*% t(X) %*% y
+  return(beta.ridge)
 }
 
 
 #Cross validation
 
 # Vector of lambdas
-lam.vec <- 10^(seq(2.3, 2.7, by = 0.01))
+lam.vec <- 10^(seq(2.7,3, by= 0.01))
+
 
 # Will store CV error in this
 CV.error <- numeric(length = length(lam.vec))
@@ -47,5 +47,7 @@ for (l in 1:length(lam.vec)) {
 # Find the best lambda
 chosen.lam <- lam.vec[which.min(CV.error)]
 
+beta.ridge <- ridge_reg(x,y,chosen.lam) 
+
 # Save the model
-save(list = c("chosen.lam", "ridge_reg"), file = "fit_params.Rdata")
+save(list = c("chosen.lam", "beta.ridge"), file = "fit_params.Rdata")

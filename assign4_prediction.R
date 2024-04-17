@@ -2,10 +2,9 @@
 # x = vector of length 100
 predict.y <- function(x)
 {
+  x <- as.matrix(x)
   load("fit_params.Rdata")
-  
-  f.x <- ridge_reg(x,y,chosen.lam)
+  f.x <- x %*% beta.ridge
   return(f.x)
 }
-
 
